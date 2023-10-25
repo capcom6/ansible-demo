@@ -1,0 +1,5 @@
+[docker]
+demo.example.com
+
+[general:children]
+docker

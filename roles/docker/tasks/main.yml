@@ -1,0 +1,37 @@
+- name: Import Docker repo key
+  ansible.builtin.rpm_key:
+    key: https://download.docker.com/linux/centos/gpg
+    state: present
+
+- name: Install Docker Repo
+  copy:
+    src: docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+
+- name: Install Docker packages
+  yum:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - python-docker
+    state: present
+
+- name: Copy Docker Config
+  ansible.builtin.copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+  notify: reload docker
+  # register: docker_config
+
+- name: Start Docker Service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+#
+# - name: Reload Docker Service
+#   service:
+#     name: docker
+#     state: reloaded
+#   when: docker_config.changed || jdashkjd || hkdhskja
