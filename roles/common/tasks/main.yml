@@ -45,3 +45,14 @@
     path: /var/log/journal
     state: directory
   notify: fix journal permissions
+
+- name: Install NTP
+  ansible.builtin.package:
+    name: ntp
+    state: present
+
+- name: Start NTP
+  ansible.builtin.service:
+    name: ntpd
+    state: started
+    enabled: true
